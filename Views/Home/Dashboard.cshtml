@@ -1,0 +1,61 @@
+@model List<Act>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    @{
+        @if(@ViewBag.Error==true){
+            <h5> Cannot Join The Same Date</h5>
+        }
+    }
+    <div>
+    <h2>Dojo Activity Center </h2> <a href="/logout">Log Out</a>
+    <p> Welcome, @ViewBag.Name</p>
+
+    </div>
+    <table style = "width:100%">
+        <tr>
+            <th>Activity</th>
+            <th>Date and Time </th>
+            <th>Duration</th>
+            <th>Event Coordinator</th>
+            <th>No. of Participants </th>
+            <th>Actions </th>
+        </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            
+            <td><a href="/actdetail/@item.ActivityId">@item.Title</a></td>
+            <td>@item.Date.ToString("dd/MM") At  @item.Time</td>
+            <td> @item.Duration </td>
+            <td> @item.ThisUser.Name
+            </td>
+            <td>@item.Participants.Count</td>
+            <td> 
+                    @if(@item.UserId == @ViewBag.theId){
+                        <a href="/delete/@item.ActivityId">Delete</a>}
+                        else if(item.Participants.Any(a => a.UserId == ViewBag.theId)){
+                            <a href="/cancel/@item.ActivityId">Leave</a>
+                        }
+                        else{
+                            <a href="/join/@item.ActivityId">Join</a>
+                        }
+                
+                </td>
+        </tr>
+    }
+    </table>
+
+
+    <button>   <a href="/addact/@ViewBag.Id">Add Activity</a> </button>
+
+
+</body>
+</html>
